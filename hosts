@@ -1,0 +1,140 @@
+[OSEv3:children]
+masters
+nodes
+etcd
+lb
+##Set variables common for all OSEv3 hosts
+[OSEv3:vars]
+
+ansible_ssh_user=ocpadmin
+openshift_deployment_type=openshift-enterprise
+openshift_release=3.11
+openshift_enable_service_catalog=false
+
+##Authentication Provider settings.
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+openshift_master_htpasswd_users={'ocpadmin' : 'redhat@123'}
+#openshift_master_htpasswd_file=/etc/origin/master/users.htpasswd
+
+##Docker options
+openshift_docker_options="--insecure-registry 172.31.0.0/16"
+
+##Enable Network Time Protocol (NTP) to prevent masters and nodes in the cluster from going out of sync.
+openshift_clock_enabled=true
+
+##Default subdomain
+openshift_master_default_subdomain=cloudapps.techmahindra.com
+
+openshift_pkg_version=-3.11.98
+openshift_image_tag=v3.11
+
+#openshift_cockpit_deployer_version=v3.11
+#openshift_disable_check=memory_availability,docker_storage_driver,docker_image_availability
+openshift_disable_check=docker_storage,memory_availability,disk_availability,docker_image_availability,package_version,package_availability
+openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true']},{'name': 'node-config-infra','labels': ['node-role.kubernetes.io/infra=true']},{'name': 'node-config-compute','labels': ['node-role.kubernetes.io/compute=true'],'edits': [{ 'key': 'kubeletArguments.pods-per-core','value': ['20']}]}]
+
+openshift_master_cluster_hostname=lb.techmahindra.com 
+openshift_master_cluster_public_hostname=ec2-52-14-221-86.us-east-2.compute.amazonaws.com
+openshift_cockpit_deployer_image='registry.access.redhat.com/openshift3/registry-console:v3.11.98'
+openshift_web_console_version=v3.11
+openshift_web_console_install=true
+oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
+
+##Persistent storage for Registry
+openshift_hosted_registry_storage_kind=nfs
+openshift_hosted_registry_storage_access_modes=['ReadWriteMany']
+openshift_hosted_registry_storage_host=172.31.14.65 
+openshift_hosted_registry_storage_nfs_directory=/nfsshare
+openshift_hosted_registry_storage_volume_name=registry
+openshift_hosted_registry_storage_volume_size=40Gi
+openshift_enable_unsupported_configurations=True
+
+###auth url
+oreg_auth_user=7671377|udit123
+oreg_auth_password=eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiIxZTBjNDdhMTVhMWU0NThkYjdlM2FiMjczM2Y3YjQ5NSJ9.fRFLovw-yHD759MuV4aiuAfEN6LxVjOkmrSU_cw81Xo-ZMT4z7aaY80kCESNd_8-K_O9uLYPKaPWAmoT7lPbduNMovE4VB7mHX7Q_G8zO4Jt_fTlF3nnGT2w8LdOMf00eowQ3fKnPrJFIaBsys6aKq_j73tnNLNcaxB0dt0AEsPzogDVvRCI9kTKqMbZvkrAyhc97A9gZ9pvQgVqC5RXFPmNaucFOqteizGQWj54CQeFt1HhhWnqDo8O7TP8EFVAjD_9AJq3tejQjcqaOTPoMAomdmO65pkKIgY7VH2FR4NgRESRrxiXBNG8-fWoMhY_uUUydrgU4Ot7MTKh7b1DRRe6QLtg4KjqtPfsgM6s-Mwx1DCW61ro538pwDzfJGKnTtSi_IdW3eyCKupqOGx9NksgmnYXCzUOfTlNZTKyyEeeAr3P8Yd9_fF6WSSepqYFZeuroRAngKOM7mnuRQAmbJG8Nu3nwUemZ_3AUizBXfEoa71I7ieaO5RJZz0gkD4kNtRdR953vTLz9SFiujCF6N1JD-L5ONFJaFXFvk0LxaaGBk5cor1F7UZK76U3AWTeaR404ShjqLotjX5DJ65S_oDUIDnS-Cacz3TkTlIwvmbz0aE9cVHm2DJ8Ehlc5-pLZDBViOLO-cJEmpGwjvjC3orsHkdZkB5mVwEnFy2asUA
+
+
+###Enable Openshift multi-tenant plugin
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+
+###Pod Network CIDR, default(10.128.0.0/14)
+osm_cluster_network_cidr=10.128.0.0/14
+
+###Service Network CIDR, default(172.30.0.0/16).
+openshift_portal_net=192.168.0.0/24
+
+[masters]
+master01.techmahindra.com
+master02.techmahindra.com
+master03.techmahindra.com
+
+[etcd]
+master01.techmahindra.com
+master02.techmahindra.com
+master03.techmahindra.com
+
+[nodes]
+master01.techmahindra.com openshift_node_group_name='node-config-master'
+master02.techmahindra.com openshift_node_group_name='node-config-master'
+master03.techmahindra.com openshift_node_group_name='node-config-master'
+infra01.techmahindra.com openshift_node_group_name='node-config-infra'
+infra02.techmahindra.com openshift_node_group_name='node-config-infra'
+infra03.techmahindra.com openshift_node_group_name='node-config-infra'
+worker01.techmahindra.com openshift_node_group_name='node-config-compute'
+worker02.techmahindra.com openshift_node_group_name='node-config-compute'
+worker03.techmahindra.com openshift_node_group_name='node-config-compute'
+
+[hostprep]
+master01.techmahindra.com
+master02.techmahindra.com
+master03.techmahindra.com
+infra01.techmahindra.com
+infra02.techmahindra.com
+infra03.techmahindra.com
+worker01.techmahindra.com
+worker02.techmahindra.com
+worker03.techmahindra.com
+lb.techmahindra.com
+
+[deployapps]
+master01.techmahindra.com
+
+[dns]
+dns.techmahindra.com
+
+###[nfs]
+###nfs.techmahindra.com
+
+[registry]
+registry.techmahindra.com
+
+[lb]
+lb.techmahindra.com
+
+[master01]
+master01.techmahindra.com
+
+[master02]
+master02.techmahindra.com
+
+[master03]
+master03.techmahindra.com
+
+[infra01]
+infra01.techmahindra.com
+
+[infra02]
+infra02.techmahindra.com
+
+[infra03]
+infra03.techmahindra.com
+
+[worker01]
+worker01.techmahindra.com
+
+[worker02]
+worker02.techmahindra.com
+
+[worker03]
+worker03.techmahindra.com
+
