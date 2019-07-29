@@ -78,22 +78,14 @@ master01.techmahindra.com openshift_node_group_name='node-config-master'
 master02.techmahindra.com openshift_node_group_name='node-config-master'
 master03.techmahindra.com openshift_node_group_name='node-config-master'
 infra01.techmahindra.com openshift_node_group_name='node-config-infra'
-infra02.techmahindra.com openshift_node_group_name='node-config-infra'
-infra03.techmahindra.com openshift_node_group_name='node-config-infra'
 worker01.techmahindra.com openshift_node_group_name='node-config-compute'
-worker02.techmahindra.com openshift_node_group_name='node-config-compute'
-worker03.techmahindra.com openshift_node_group_name='node-config-compute'
 
 [hostprep]
 master01.techmahindra.com
 master02.techmahindra.com
 master03.techmahindra.com
 infra01.techmahindra.com
-infra02.techmahindra.com
-infra03.techmahindra.com
 worker01.techmahindra.com
-worker02.techmahindra.com
-worker03.techmahindra.com
 lb.techmahindra.com
 
 [deployapps]
@@ -114,27 +106,5 @@ lb.techmahindra.com
 [master01]
 master01.techmahindra.com
 
-[master02]
-master02.techmahindra.com
 
-[master03]
-master03.techmahindra.com
-
-[infra01]
-infra01.techmahindra.com
-
-[infra02]
-infra02.techmahindra.com
-
-[infra03]
-infra03.techmahindra.com
-
-[worker01]
-worker01.techmahindra.com
-
-[worker02]
-worker02.techmahindra.com
-
-[worker03]
-worker03.techmahindra.com
 
